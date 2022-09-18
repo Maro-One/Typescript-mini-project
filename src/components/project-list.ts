@@ -1,9 +1,9 @@
-import { DragTarget } from '../models/drag-drop.js';
-import { Project, ProjectStatus } from '../models/project.js';
-import cpm from './base-component.js';
-import { autobind } from '../decorators/autobind.js';
-import { projectState } from '../state/project.js';
-import { ProjectItem } from './project-item.js';
+import { DragTarget } from '../models/drag-drop';
+import { Project, ProjectStatus } from '../models/project';
+import cpm from './base-component';
+import { autobind } from '../decorators/autobind';
+import { projectState } from '../state/project';
+import { ProjectItem } from './project-item';
 //ProjectList
 export class ProjectList extends cpm<HTMLDivElement, HTMLElement> implements DragTarget {
     assignedProjects: Project[];
@@ -15,7 +15,7 @@ export class ProjectList extends cpm<HTMLDivElement, HTMLElement> implements Dra
         this.renderContent();
 
     }
-
+    @autobind
     dragOverHandler(event: DragEvent) {
         if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
             event.preventDefault();
@@ -24,10 +24,12 @@ export class ProjectList extends cpm<HTMLDivElement, HTMLElement> implements Dra
         }
 
     }
+    @autobind
     dropHandler(event: DragEvent) {
         const prjId = event.dataTransfer!.getData('text/plain');
         projectState.moveProject(prjId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.finished);
     }
+    @autobind
     dragLeaveHandler(_: DragEvent) {
         const listEl = this.element.querySelector('ul')!;
         listEl.classList.remove('droppable');
